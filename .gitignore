@@ -42,3 +42,6 @@ htmlcov/
 
 # ChromaDB
 chroma_db/
+
+# Learnings
+learnings.ipynb
