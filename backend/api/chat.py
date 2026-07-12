@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from services.llm import get_groq_model
-from fastapi.responses import Response
+from fastapi.responses import Response, JSONResponse
 from schemas.models import ChatRequest, SessionArtifacts
 from langchain_classic.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
@@ -13,7 +13,7 @@ from operator import itemgetter
 chat_router = APIRouter()
 
 @chat_router.post("/chat")
-def start_chat(mssg: ChatRequest, session_id: SessionArtifacts):
+def start_chat(request: ChatRequest):
     llm = get_groq_model("llama-3.3-70b-versatile")
 
 
@@ -36,7 +36,7 @@ def start_chat(mssg: ChatRequest, session_id: SessionArtifacts):
         ("user", "{question}")
     ])
 
-    db = vector_store.get(session_id.id)
+    db = vector_store.get(request.id)
     if db == None:
         chain = RunnablePassthrough.assign(
             context=RunnableLambda(lambda _: "")
@@ -49,11 +49,11 @@ def start_chat(mssg: ChatRequest, session_id: SessionArtifacts):
 
     chat_with_history = RunnableWithMessageHistory(runnable=chain, get_session_history= get_history, input_messages_key="question", history_messages_key="history")
     response = chat_with_history.invoke(input= {
-        "question": mssg.text,
+        "question": request.text,
     },
     config={
         "configurable":{
-            "session_id": session_id.id
+            "session_id": request.id
         }
     })
 
@@ -75,8 +75,14 @@ def delete_session_history(session_id: str):
 def get_session_history(session_id: str):
     if session_id in history_store:
         message_history = history_store[session_id]
-        res = get_buffer_string(message_history.messages)
-        return Response(status_code=200, content= res)
+        res = []
+        for mssg in message_history.messages:
+            res.append({
+                "type": mssg.type,
+                "content": mssg.content
+            })
+
+        return JSONResponse(status_code=200, content= res)
     
     raise HTTPException(status_code=404, detail= f"{session_id} not found...")
         
