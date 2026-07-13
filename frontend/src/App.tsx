@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AppLayout from './components/Layout/AppLayout';
 import Sidebar from './components/Sidebar/Sidebar';
@@ -64,6 +65,16 @@ export default function App() {
 
   return (
     <AppLayout sidebar={sidebar}>
+      {/* Floating Hamburger Menu (Mobile Only) */}
+      {!isSidebarOpen && (
+        <button
+          onClick={toggleSidebar}
+          className="fixed top-4 left-4 z-40 p-2 rounded-lg bg-lumi-bg-secondary border border-lumi-border text-lumi-text md:hidden shadow-lg"
+        >
+          <Menu size={24} />
+        </button>
+      )}
+
       <AuthModal 
         isOpen={requireAuth || isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
