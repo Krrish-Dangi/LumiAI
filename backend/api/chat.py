@@ -47,7 +47,7 @@ def start_chat(request: ChatRequest, token_user_id: str | None = Depends(verify_
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", 
-            '''You are a helpful, intelligent conversational assistant. 
+            '''Your name is Lumi and you are a helpful, intelligent conversational assistant. 
 
             Your goal is to answer the user's questions naturally while seamlessly utilizing both our past conversation history and any provided external documents.
 

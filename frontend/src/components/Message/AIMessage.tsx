@@ -39,6 +39,8 @@ function TypingIndicator() {
   );
 }
 
+import LumiLogo from '../Logo/LumiLogo';
+
 function AIMessage({ message, isLoading = false }: AIMessageProps) {
   // Only apply typewriter effect to NEW messages (less than 2 seconds old when mounted)
   // and only if they are not the loading placeholder.
@@ -90,13 +92,8 @@ function AIMessage({ message, isLoading = false }: AIMessageProps) {
         {/* Avatar + Content */}
         <div className="flex items-start gap-3">
           {/* Lumi avatar */}
-          <div
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full mt-1"
-            style={{
-              background: 'linear-gradient(135deg, #8B5CF6, #7C3AED)',
-            }}
-          >
-            <Sparkles size={14} className="text-white" />
+          <div className="flex shrink-0 items-center justify-center mt-0.5">
+            <LumiLogo size={28} />
           </div>
 
           {/* Message body */}

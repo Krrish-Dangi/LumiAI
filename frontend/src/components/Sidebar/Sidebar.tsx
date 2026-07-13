@@ -194,11 +194,22 @@ function Sidebar({
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
             className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
               user
-                ? 'bg-gradient-to-br from-lumi-violet to-lumi-magenta text-white'
-                : 'bg-lumi-bg border border-lumi-border text-lumi-text-muted'
+                ? 'bg-gradient-to-br from-lumi-violet to-lumi-magenta text-white overflow-hidden relative'
+                : 'bg-lumi-bg border border-lumi-border text-lumi-text-muted overflow-hidden relative'
             }`}
           >
-            <User size={15} />
+            {user?.user_metadata?.avatar_url || user?.user_metadata?.picture ? (
+              <img 
+                src={user.user_metadata.avatar_url || user.user_metadata.picture} 
+                alt="Profile" 
+                className="w-full h-full object-cover absolute inset-0 z-10 bg-transparent" 
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            ) : null}
+            <User size={15} className="z-0" />
           </motion.div>
 
           {/* Name + Email — fades in/out smoothly */}
