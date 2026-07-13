@@ -25,8 +25,6 @@ function ConversationCard({
       transition={{ duration: 0.25, ease: 'easeOut' }}
       whileHover={{ y: -1 }}
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className={`
         relative flex items-start gap-3 rounded-xl px-3 py-2.5 cursor-pointer
         transition-colors duration-200 group
@@ -60,24 +58,19 @@ function ConversationCard({
         </p>
       </div>
 
-      {/* Delete button — visible on hover */}
-      {isHovered && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.15 }}
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete(conversation.id);
-          }}
-          className="absolute top-2 right-2 p-1.5 rounded-lg
-            text-lumi-text-muted hover:text-lumi-error hover:bg-lumi-error/10
-            transition-colors duration-150 cursor-pointer"
-        >
-          <Trash2 size={14} />
-        </motion.button>
-      )}
+      {/* Delete button — visible always on mobile, on hover on desktop */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(conversation.id);
+        }}
+        className="absolute top-2 right-2 p-1.5 rounded-lg z-10
+          text-lumi-text-muted hover:text-lumi-error hover:bg-lumi-error/10
+          transition-all duration-150 cursor-pointer
+          md:opacity-0 md:group-hover:opacity-100 opacity-100"
+      >
+        <Trash2 size={16} />
+      </button>
     </motion.div>
   );
 }

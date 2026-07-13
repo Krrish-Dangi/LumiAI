@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AppLayout from './components/Layout/AppLayout';
 import Sidebar from './components/Sidebar/Sidebar';
@@ -26,8 +26,13 @@ export default function App() {
     selectConversation,
     toggleSidebar,
     deleteConversation,
+    loadConversations,
     messagesEndRef,
   } = useChatState();
+
+  useEffect(() => {
+    loadConversations();
+  }, [user, loadConversations]);
 
   const greeting = getGreeting();
 
@@ -48,7 +53,7 @@ export default function App() {
 
   if (authLoading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-lumi-bg">
+      <div className="flex h-[100dvh] w-screen items-center justify-center bg-lumi-bg">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-lumi-violet"></div>
       </div>
     );

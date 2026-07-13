@@ -136,3 +136,22 @@ def get_metadata(session_id: str, user_id: str):
         
         res = {"created_at": data[0][2], "updated_at": data[0][3], "title": data[0][4]}
         return res
+
+def get_conversations_by_user(user_id: str):
+    with sq.connect("store/lumi.db") as connection:
+        cursor = connection.cursor()
+        query = '''
+        SELECT session_id, title, updated_at, created_at FROM conversations
+        WHERE user_id = ?
+        ORDER BY updated_at DESC;
+        '''
+        data = cursor.execute(query, (user_id,)).fetchall()
+        conversations = []
+        for row in data:
+            conversations.append({
+                "id": row[0],
+                "title": row[1],
+                "updatedAt": row[2],
+                "createdAt": row[3]
+            })
+        return conversations

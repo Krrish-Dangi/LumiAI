@@ -51,13 +51,27 @@ function Sidebar({
   );
 
   return (
-    <motion.aside
-      animate={{ width: isOpen ? 280 : 68 }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-      className="h-full flex flex-col bg-lumi-bg-secondary border-r border-lumi-border overflow-hidden shrink-0"
-    >
-      {/* ═══ TOP BAR ═══ */}
-      <div className="pt-4 px-3 shrink-0">
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
+          onClick={onToggle}
+        />
+      )}
+      
+      <motion.aside
+        animate={{ 
+          width: isOpen ? 280 : 68,
+          x: isOpen ? 0 : 0
+        }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        className={`h-full flex flex-col bg-lumi-bg-secondary border-r border-lumi-border overflow-hidden shrink-0 z-50
+          ${isOpen ? 'absolute md:relative translate-x-0' : 'absolute md:relative -translate-x-full md:translate-x-0'}
+          transition-transform duration-300 ease-in-out`}
+      >
+        {/* ═══ TOP BAR ═══ */}
+        <div className="pt-4 px-3 shrink-0">
         <AnimatePresence mode="wait" initial={false}>
           {isOpen ? (
             /* ─── Expanded: Glassmorphic island with New Chat + Collapse ─── */
@@ -258,6 +272,7 @@ function Sidebar({
         </motion.div>
       </div>
     </motion.aside>
+    </>
   );
 }
 

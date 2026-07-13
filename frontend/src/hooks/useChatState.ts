@@ -162,6 +162,7 @@ export function useChatState() {
     selectConversation,
     toggleSidebar,
     deleteConversation,
+    loadConversations,
     messagesEndRef,
   };
 }

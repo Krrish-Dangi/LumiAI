@@ -8,7 +8,7 @@ interface AppLayoutProps {
 
 export default function AppLayout({ sidebar, children }: AppLayoutProps) {
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-lumi-bg">
+    <div className="flex h-[100dvh] w-screen overflow-hidden bg-lumi-bg">
       {/* Sidebar */}
       {sidebar}
 

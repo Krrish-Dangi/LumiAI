@@ -150,3 +150,10 @@ def metadata(session_id: str, user_id: str, token_user_id: str | None = Depends(
         return JSONResponse(status_code=200, content=res)
     
     raise HTTPException(status_code=404, detail= f"{session_id} not found...")
+
+@chat_router.get("/conversations")
+def get_user_conversations(user_id: str, token_user_id: str | None = Depends(verify_user)):
+    validate_access(user_id, token_user_id)
+    from services.metadata import get_conversations_by_user
+    conversations = get_conversations_by_user(user_id)
+    return JSONResponse(status_code=200, content=conversations)

@@ -32,23 +32,46 @@ async function getStorageKey(): Promise<string> {
 }
 
 async function getStoredConversations(): Promise<Conversation[]> {
+  let localConvs: Conversation[] = [];
   try {
     const key = await getStorageKey();
     const data = localStorage.getItem(key);
-    if (!data) return [];
-    
-    // Parse JSON and convert string dates back to Date objects
-    const parsed = JSON.parse(data);
-    return parsed.map((conv: any) => ({
-      ...conv,
-      createdAt: new Date(conv.createdAt),
-      updatedAt: new Date(conv.updatedAt),
-      messages: conv.messages || []
-    })).sort((a: Conversation, b: Conversation) => b.updatedAt.getTime() - a.updatedAt.getTime());
+    if (data) {
+      localConvs = JSON.parse(data).map((conv: any) => ({
+        ...conv,
+        createdAt: new Date(conv.createdAt),
+        updatedAt: new Date(conv.updatedAt),
+        messages: conv.messages || []
+      })).sort((a: Conversation, b: Conversation) => b.updatedAt.getTime() - a.updatedAt.getTime());
+    }
   } catch (err) {
     console.error("Failed to parse conversations from localStorage", err);
-    return [];
   }
+
+  try {
+    const userId = await getUserId();
+    const authHeaders = await getAuthHeaders();
+    const res = await fetch(`${API_BASE}/conversations?user_id=${userId}`, {
+      headers: { ...authHeaders }
+    });
+    
+    if (res.ok) {
+      const backendConvs = await res.json();
+      const merged = backendConvs.map((conv: any) => ({
+        id: conv.id,
+        title: conv.title,
+        createdAt: new Date(conv.createdAt),
+        updatedAt: new Date(conv.updatedAt),
+        messages: localConvs.find(c => c.id === conv.id)?.messages || []
+      }));
+      await saveStoredConversations(merged);
+      return merged;
+    }
+  } catch (err) {
+    // Unauthenticated or network error, fallback to local
+  }
+
+  return localConvs;
 }
 
 async function saveStoredConversations(conversations: Conversation[]) {
