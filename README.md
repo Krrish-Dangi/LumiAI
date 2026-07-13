@@ -102,3 +102,4 @@ When deploying to production, ensure that:
 * The frontend `.env` file is configured with the live backend URL.
 * The Supabase dashboard "Site URL" is updated to match your deployed frontend domain.
 * The backend is configured to persist the `store/` directory if you wish to retain user conversation history and uploaded documents.
+* Note: If the backend doesn't respond on certain networks (I've observed this mainly on some Jio connections), it's likely due to ISP/DNS routing rather than the application itself. If you face this issue, switching to Cloudflare DNS (1.1.1.1), Google DNS (8.8.8.8), or using Cloudflare WARP should resolve it.
