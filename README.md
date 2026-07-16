@@ -29,7 +29,7 @@ Built using:
 # Architecture
 
 <p align="center">
-    <img src="assets/architecture.png" alt="Architecture Diagram" width="900">
+    <img src="assets/Architecture.png" alt="Architecture Diagram" width="900">
 </p>
 
 
