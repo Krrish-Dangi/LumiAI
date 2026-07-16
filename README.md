@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="assets/banner" alt="LumiAI Banner" width="100%">
+    <img src="assets/banner.gif" alt="LumiAI Banner" width="100%">
 </p>
 
 
@@ -22,14 +22,14 @@ Built using:
 
 
 <p align="center">
-    <img src="assets/features" alt="LumiAI Features" width="100%">
+    <img src="assets/features.gif" alt="LumiAI Features" width="100%">
 </p>
 
 
 # Architecture
 
 <p align="center">
-    <img src="assets/architecture" alt="Architecture Diagram" width="900">
+    <img src="assets/architecture.png" alt="Architecture Diagram" width="900">
 </p>
 
 
@@ -102,19 +102,19 @@ LumiAI
 
 ## Home
 
-<img src="assets/home" width="100%">
+<img src="assets/home.png" width="100%">
 
 ---
 
 ## Chat Interface
 
-<img src="assets/chat" width="100%">
+<img src="assets/chat.png" width="100%">
 
 ---
 
 ## PDF Upload
 
-<img src="assets/pdf_upload" width="100%">
+<img src="assets/pdf_upload.png" width="100%">
 
 
 # Local Setup
