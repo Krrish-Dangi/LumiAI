@@ -1,105 +1,252 @@
-# LumiAI - Mini ChatGPT
+<p align="center">
+    <img src="assets/banner" alt="LumiAI Banner" width="100%">
+</p>
 
-LumiAI is a full-stack, local-first AI chatbot application designed for seamless conversations and document-based question answering. It features a modern glassmorphic user interface, robust authentication, and Retrieval-Augmented Generation (RAG) capabilities.
 
-## Capabilities
+## LumiAI
 
-* Conversational AI: Engages in natural, context-aware conversations powered by Groq LLMs.
-* Document Analysis (RAG): Supports PDF uploads, allowing users to ask questions directly related to the contents of the uploaded documents.
-* Local Memory: Stores conversation history and metadata locally using SQLite, ensuring context is maintained across sessions.
-* Auto-Generated Titles: Automatically generates concise, descriptive titles for new conversations based on the user's initial prompt.
-* Authentication: Secure Google OAuth login integration via Supabase.
-* Premium UI/UX: Features a highly polished, responsive interface with smooth micro-animations using Framer Motion.
+> A full-stack AI assistant with conversational memory, Retrieval-Augmented Generation (RAG), PDF understanding, and secure Google authentication.
 
-## Project Structure
+Built using:
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=python,fastapi,react,typescript,vite,tailwind,supabase,sqlite&theme=light" />
+</p>
 
-The project is divided into two main directories: `backend` and `frontend`.
+<p align="center">
+  <img src="https://img.shields.io/badge/LangChain-121212?style=for-the-badge&logo=chainlink&logoColor=white" />
+  <img src="https://img.shields.io/badge/ChromaDB-7B3FE4?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Groq-F55036?style=for-the-badge&logo=groq&logoColor=white" />
+  <img src="https://img.shields.io/badge/Framer_Motion-000000?style=for-the-badge&logo=framer&logoColor=white" />
+  <img src="https://img.shields.io/badge/LangChain-RAG-0A66C2?style=for-the-badge" />
+</p>
 
-### Backend
-Powered by Python, FastAPI, and LangChain.
 
-* `api/`: Contains the FastAPI routers for chat and file upload endpoints.
-* `services/`: Core business logic, including LLM integration, database initialization, vector store (ChromaDB) management, and authentication verification.
-* `schemas/`: Pydantic models for data validation and request handling.
-* `requirements.txt`: Python dependencies required to run the server.
+<p align="center">
+    <img src="assets/features" alt="LumiAI Features" width="100%">
+</p>
 
-### Frontend
-Powered by React, Vite, TypeScript, and TailwindCSS.
 
-* `src/components/`: Reusable UI components including the chat interface, sidebar, and message bubbles.
-* `src/hooks/`: Custom React hooks for managing chat state and authentication.
-* `src/services/`: API service files for communicating with the FastAPI backend.
-* `src/lib/`: Configuration files for external services like Supabase.
+# Architecture
 
-## Local Setup Instructions
+<p align="center">
+    <img src="assets/architecture" alt="Architecture Diagram" width="900">
+</p>
 
-### Prerequisites
-* Python 3.10 or higher
-* Node.js (v16 or higher)
-* A Supabase project (for Google OAuth and JWT verification)
-* A Groq API key
 
-### 1. Backend Setup
+# System Workflow
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
+```text
+                    User
+                      │
+                      ▼
+            React + TypeScript Frontend
+                      │
+          HTTP Requests + JWT Authentication
+                      │
+                      ▼
+               FastAPI Backend
+        ┌─────────────┴─────────────┐
+        │                           │
+        ▼                           ▼
+   Chat Request               PDF Upload
+        │                           │
+        │                    Create Embeddings
+        │                           │
+        │                           ▼
+        │                      ChromaDB
+        │                           │
+        └─────────────┬─────────────┘
+                      ▼
+              LangChain Pipeline
+                      │
+          Retrieval + Prompt Building
+                      │
+                      ▼
+             Groq (Llama 3.3 70B)
+                      │
+                      ▼
+               Generated Response
+                      │
+                      ▼
+              React Frontend
+```
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   # On Windows:
-   venv\Scripts\activate
-   # On Mac/Linux:
-   source venv/bin/activate
-   ```
+# Project Structure
 
-3. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```text
+LumiAI
+│
+├── backend
+│   ├── api
+│   ├── schemas
+│   ├── services
+│   ├── store
+│   ├── requirements.txt
+│   └── main.py
+│
+├── frontend
+│   ├── src
+│   │   ├── components
+│   │   ├── hooks
+│   │   ├── services
+│   │   ├── lib
+│   │   └── pages
+│   │
+│   ├── package.json
+│   └── vite.config.ts
+│
+└── README.md
+```
 
-4. Create a `.env` file in the `backend` directory with the following variables:
-   ```
-   GROQ_API_KEY=your_groq_api_key_here
-   JWT_SECRET=your_supabase_jwt_secret_here
-   ```
+# Screenshots
 
-5. Start the FastAPI server:
-   ```bash
-   uvicorn main:app --reload
-   ```
-   The backend will run on `http://localhost:8000`. The database and vector store will be automatically initialized upon the first run.
+## Home
 
-### 2. Frontend Setup
+<img src="assets/home" width="100%">
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
+---
 
-2. Install the required dependencies:
-   ```bash
-   npm install
-   ```
+## Chat Interface
 
-3. Create a `.env` file in the `frontend` directory with the following variables:
-   ```
-   VITE_API_URL=http://localhost:8000
-   VITE_SUPABASE_URL=your_supabase_project_url_here
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
-   ```
+<img src="assets/chat" width="100%">
 
-4. Start the Vite development server:
-   ```bash
-   npm run dev
-   ```
-   The frontend will run on `http://localhost:5173` by default.
+---
 
-## Deployment Notes
-When deploying to production, ensure that:
-* The frontend `.env` file is configured with the live backend URL.
-* The Supabase dashboard "Site URL" is updated to match your deployed frontend domain.
-* The backend is configured to persist the `store/` directory if you wish to retain user conversation history and uploaded documents.
-* Note: If the backend doesn't respond on certain networks (I've observed this mainly on some Jio connections), it's likely due to ISP/DNS routing rather than the application itself. If you face this issue, switching to Cloudflare DNS (1.1.1.1), Google DNS (8.8.8.8), or using Cloudflare WARP should resolve it.
+## PDF Upload
+
+<img src="assets/pdf_upload" width="100%">
+
+
+# Local Setup
+
+## Prerequisites
+
+- Python 3.10+
+- Node.js 16+
+- Groq API Key
+- Supabase Project
+
+
+## Backend
+
+```bash
+cd backend
+```
+
+Create a virtual environment.
+
+```bash
+python -m venv venv
+```
+
+Windows
+
+```bash
+venv\Scripts\activate
+```
+
+Linux / macOS
+
+```bash
+source venv/bin/activate
+```
+
+Install dependencies.
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file.
+
+```env
+GROQ_API_KEY=YOUR_GROQ_API_KEY
+JWT_SECRET=YOUR_SUPABASE_JWT_SECRET
+```
+
+Run the server.
+
+```bash
+uvicorn main:app --reload
+```
+
+Backend runs on
+
+```
+http://localhost:8000
+```
+
+---
+
+## Frontend
+
+```bash
+cd frontend
+```
+
+Install dependencies.
+
+```bash
+npm install
+```
+
+Create a `.env` file.
+
+```env
+VITE_API_URL=http://localhost:8000
+VITE_SUPABASE_URL=YOUR_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+```
+
+Run
+
+```bash
+npm run dev
+```
+
+Frontend
+
+```
+http://localhost:5173
+```
+
+---
+
+# Deployment
+
+Before deploying:
+
+- Configure the frontend with the production backend URL.
+- Update the Supabase Site URL.
+- Persist the backend `store/` directory if conversation history should survive deployments.
+
+
+# Engineering Challenges
+
+Some of the key challenges solved while building LumiAI:
+
+- Session-specific conversation management.
+- Persistent local chat history.
+- Retrieval-Augmented Generation (RAG) pipeline.
+- Authentication synchronization between React and FastAPI.
+- Efficient document embedding and retrieval using ChromaDB.
+- Modular backend architecture for scalability.
+
+
+# Future Improvements
+
+- Voice conversations
+- Streaming AI responses
+- Multi-document retrieval
+- Image understanding
+- Agent tool integration
+- Cloud synchronization
+- User-selectable LLM providers
+
+----
+
+# Author
+
+**Krrish Kumar Dangi**
+
+If you found this project interesting, consider giving it a ⭐ on GitHub.
